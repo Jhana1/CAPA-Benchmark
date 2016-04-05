@@ -1,6 +1,8 @@
 #include "benchmarkObj.h"
 #include "benchmarkKernels.cuh"
 #include "miscFunctions.h"
+#include <sys/time.h>
+#include <stdint.h>
 
 BenchmarkObj::BenchmarkObj()
 {
@@ -28,38 +30,33 @@ int BenchmarkObj::TheoMemBandwidth()
 
 void BenchmarkObj::BenchMemBandwidth()
 {
-    size_t size = 10;
-    int *h_a, *h_b, *h_c;
-    int *d_a, *d_b, *d_c;
-    
-    h_a = (int*) malloc(sizeof(int) * size);
-    h_b = (int*) malloc(sizeof(int) * size);
-    h_c = (int*) malloc(sizeof(int) * size);
+    size_t size = 10000000;
+    uint8_t *h_a, *h_b;
+    uint8_t *d_a, *d_b;
+    timespec ts, te;
+
+    h_a = (uint8_t*) malloc(sizeof(uint8_t) * size);
+    h_b = (uint8_t*) malloc(sizeof(uint8_t) * size);
 
     vectorFill(h_a, size);
     vectorFill(h_b, size);
-    vectorPrint(h_a, size);
-    vectorPrint(h_b, size);
 
-    cudaMalloc((void **) &d_a, sizeof(int) * size);
-    cudaMalloc((void **) &d_b, sizeof(int) * size);
-    cudaMalloc((void **) &d_c, sizeof(int) * size);
+    cudaMalloc((void **) &d_a, sizeof(uint8_t) * size);
+    cudaMalloc((void **) &d_b, sizeof(uint8_t) * size);
 
-    cudaMemcpy(d_a, h_a, sizeof(int) * size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_b, h_b, sizeof(int) * size, cudaMemcpyHostToDevice);
+    for (int i = 0; i < 10; ++i)
+    {
+        clock_gettime(CLOCK_REALTIME, &ts);
+        cudaMemcpy(d_a, h_a, sizeof(uint8_t) * size, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_b, h_b, sizeof(uint8_t) * size, cudaMemcpyHostToDevice);
+        clock_gettime(CLOCK_REALTIME, &te);
 
-    addKernel<<<1024,1024>>>(d_a, d_b, d_c, size);
-    addKernelT<int><<<1024,1024>>>(d_c, d_c, d_c, size);
-
-    cudaMemcpy(h_c, d_c, sizeof(int) * size, cudaMemcpyDeviceToHost);
-    vectorPrint(h_c, size);
-
+        timespec diff = diffTime(ts, te);
+        std::cout << diff.tv_sec << "s " << diff.tv_nsec << "ns "
+                  << ((float) size / diff.tv_nsec) << "GB/s" <<  std::endl;
+    }
     cudaFree(d_a);
     cudaFree(d_b);
-    cudaFree(d_c);
     free(h_a);
     free(h_b);
-    free(h_c);
-
-
 }

@@ -1,13 +1,9 @@
-#include <cstdlib>
-#include <ctime>
-#include <iostream>    
-
 template <typename T>
 void vectorFill(T *vec, size_t size)
 {
     for (size_t i = 0; i < size; ++i)
     {
-        vec[i] = std::rand()%10;
+        vec[i] = std::rand();
     }
 }
 
