@@ -4,8 +4,8 @@ find_package(CUDA QUIET REQUIRED)
 
 #Specify Binary Name
 cuda_add_executable(
-    bench
-    bench.cpp
+    benchmark
+    benchmark.cpp
     benchmarkObj.cu
     benchmarkKernels.cu
     benchmarkKernels.cuh)
