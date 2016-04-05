@@ -55,6 +55,18 @@ void BenchmarkObj::BenchMemBandwidth()
         std::cout << diff.tv_sec << "s " << diff.tv_nsec << "ns "
                   << ((float) size / diff.tv_nsec) << "GB/s" <<  std::endl;
     }
+    std::cout << std::endl << "INTERNAL" << std::endl;
+    for (int i = 0; i < 10; ++i)
+    {
+        clock_gettime(CLOCK_REALTIME, &ts);
+        cudaMemcpy(d_a, d_b, sizeof(uint8_t) * size, cudaMemcpyDeviceToDevice);
+        cudaMemcpy(d_b, d_a, sizeof(uint8_t) * size, cudaMemcpyDeviceToDevice);
+        clock_gettime(CLOCK_REALTIME, &te);
+
+        timespec diff = diffTime(ts, te);
+        std::cout << diff.tv_sec << "s " << diff.tv_nsec << "ns "
+                  << ((float) size / diff.tv_nsec) << "GB/s" <<  std::endl;
+    }
     cudaFree(d_a);
     cudaFree(d_b);
     free(h_a);
