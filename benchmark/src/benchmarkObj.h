@@ -3,10 +3,11 @@
 #include <iostream>
 
 #include <cuda_runtime.h>
-//#include <helper_cuda.h>
+#include <helper_cuda.h>
 
 class BenchmarkObj  
 {
+public:
     cudaDeviceProp mDeviceInfo;
     int mDevice;
 public:
