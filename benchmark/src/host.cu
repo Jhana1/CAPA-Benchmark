@@ -39,10 +39,18 @@ BENCHMARK_F(FloatFixture, DeviceMatrixMult, 10, 1)
     bench->device_matrix_mult();
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    hayai::ConsoleOutputter consoleOutputter;//(std::cout);
-    hayai::Benchmarker::AddOutputter(consoleOutputter);
+    if (argc > 1)
+    {
+        hayai::JsonOutputter consoleOutputter(std::cout);
+        hayai::Benchmarker::AddOutputter(consoleOutputter);
+    }
+    else
+    {
+        hayai::ConsoleOutputter consoleOutputter;
+        hayai::Benchmarker::AddOutputter(consoleOutputter);
+    }
     
     Bench<float> bb;
     AAA::max<float> binaryOp;
