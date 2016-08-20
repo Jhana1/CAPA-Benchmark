@@ -1,12 +1,13 @@
 #pragma once
+#include "benchInfo.h"
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
 #include <thrust/random.h>
 #include <cublas_v2.h>
 #include <curand.h>
-
-template <typename T>
+#include <typeinfo>
+template <typename T, BenchInfo &B>
 struct Bench{
 
     // Non-BLAS
@@ -16,31 +17,24 @@ struct Bench{
 
     // Matrix Multiplication/CuBLAS Related
     cublasHandle_t handle;
-    thrust::host_vector<T> A;
-    thrust::host_vector<T> B;
-    thrust::host_vector<T> C;
+    thrust::host_vector<T> matrixA;
+    thrust::host_vector<T> matrixB;
+    thrust::host_vector<T> matrixC;
     size_t hA, wA, wB;
 
     // Constructors
     Bench() 
     {
-        H.resize(2000000);
-        WARM_UP_ITERS = 10;
-        hA = wA = wB = 300;
-        A.resize(hA * wA);
-        B.resize(wA * wB);
-        C.resize(wB * hA);
-        randomise();
-    }
+        H.resize(B.mVectorLength);
+        WARM_UP_ITERS = B.mWarmUpIterations;
+        hA = B.mHeightA;
+        wA = B.mWidthA;
+        wB = B.mWidthB;
 
-    Bench(size_t n)
-    {
-        H.resize(n);
-        WARM_UP_ITERS = 10;
-        hA = wA = wB = 10;
-        A.resize(hA * wA);
-        B.resize(wA * wB);
-        C.resize(hA * wB);
+        matrixA.resize(hA * wA);
+        matrixB.resize(wA * wB);
+        matrixC.resize(wB * hA);
+
         randomise();
     }
 
@@ -48,8 +42,8 @@ struct Bench{
     {
         thrust::default_random_engine rng;
         thrust::generate(H.begin(), H.end(), rng);
-        thrust::generate(A.begin(), A.end(), rng);
-        thrust::generate(B.begin(), B.end(), rng);
+        thrust::generate(matrixA.begin(), matrixA.end(), rng);
+        thrust::generate(matrixB.begin(), matrixB.end(), rng);
     }
 
     void prepare()
@@ -64,13 +58,12 @@ struct Bench{
     }
 
     // Load data on and off the device.
-    void onload(thrust::host_vector<T> &H)
+    void onload()
     {
-        this->H = H;
         D = H;
     }
 
-    void offload(thrust::host_vector<T> &H)
+    void offload()
     {
         H = D;
     }
@@ -85,7 +78,7 @@ struct Bench{
     template <template <class> class Functor>
     T device_reduce_onload(Functor<T> &binaryOp)
     {
-        thrust::device_vector<T> D = H;
+        D = H;
         return thrust::reduce(D.begin(), D.end(), binaryOp.identity, binaryOp);
     }
 
@@ -104,9 +97,9 @@ struct Bench{
     void cuBLAS_prepare()
     {
         D.resize(0);
-        A.resize(hA * wA);
-        B.resize(wA * wB);
-        C.resize(hA * wB);
+        matrixA.resize(hA * wA);
+        matrixB.resize(wA * wB);
+        matrixC.resize(hA * wB);
         cublasCreate(&handle);
         device_matrix_mult();
         device_matrix_mult();
@@ -127,7 +120,7 @@ struct Bench{
                 T acc = 0;
                 for (size_t k = 0; k < wA; ++k)
                 {
-                    acc += A[i * wA + k] * B[k * wB + j];
+                    acc += matrixA[i * wA + k] * matrixB[k * wB + j];
                 }
                 ret_vec[i * wB + j] = acc;
             }
@@ -137,8 +130,8 @@ struct Bench{
 
     thrust::host_vector<T> device_matrix_mult()
     {
-        thrust::device_vector<T> d_A = A;
-        thrust::device_vector<T> d_B = B;
+        thrust::device_vector<T> d_A = matrixA;
+        thrust::device_vector<T> d_B = matrixB;
         thrust::device_vector<T> d_C(hA * wB);
 
         cuBLAS_mmul(thrust::raw_pointer_cast(&d_A[0]), 
@@ -149,19 +142,33 @@ struct Bench{
         thrust::host_vector<T> h_C = d_C;
         return h_C;
     }
-    
-    void cuBLAS_mmul(const T *A, const T *B, T *C, const size_t m, const size_t k, const size_t n) 
+
+    void cuBLAS_mmul(const float *matA, const float *matB, float *matC, const size_t m, const size_t k, const size_t n) 
     {
         size_t lda     = m;
         size_t ldb     = k;
         size_t ldc     = m;
-        const T alf    = 1;
-        const T bet    = 0;
-        const T *alpha = &alf;
-        const T *beta  = &bet;
+        const float alf    = 1;
+        const float bet    = 0;
+        const float *alpha = &alf;
+        const float *beta  = &bet;
 
-        // Do the actual multiplication
-        cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+        // Do the actual multiplicatio
+        cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, matA, lda, matB, ldb, beta, matC, ldc); 
+    }
+    
+    void cuBLAS_mmul(const double *matA, const double *matB, double *matC, const size_t m, const size_t k, const size_t n) 
+    {
+        size_t lda     = m;
+        size_t ldb     = k;
+        size_t ldc     = m;
+        const double alf    = 1;
+        const double bet    = 0;
+        const double *alpha = &alf;
+        const double *beta  = &bet;
+
+        // Do the actual multiplicatio
+        cublasDgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, alpha, matA, lda, matB, ldb, beta, matC, ldc); 
     }
 };
 

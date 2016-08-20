@@ -1,13 +1,17 @@
 #pragma once
 #include "bench.h"
+#include "benchInfo.h"
 #include "hayai.hpp"
 
-template <typename T>
+#include <iostream>
+
+template <typename T, BenchInfo &Info>
 struct BenchFixture : public ::hayai::Fixture
 {
     virtual void SetUp()
     {
-        this->bench = new Bench<T>;
+        this->bench = new Bench<T, Info>;
+        bench->onload();
     }
 
     virtual void TearDown()
@@ -15,5 +19,5 @@ struct BenchFixture : public ::hayai::Fixture
         delete this->bench;
     }
 
-    Bench<T> *bench;
+    Bench<T, Info> *bench;
 };
