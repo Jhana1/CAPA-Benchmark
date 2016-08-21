@@ -36,15 +36,14 @@ BENCHMARK_F(D8, HostMatrixMult, 10, 10)
 {
     bench->host_matrix_mult();
 }
-BENCHMARK_F(D9, HostMatrixMult, 5, 1)
+BENCHMARK_F(D9, HostMatrixMult, 10, 10)
 {
     bench->host_matrix_mult();
 }
-BENCHMARK_F(D10, HostMatrixMult, 5, 1)
+BENCHMARK_F(D10, HostMatrixMult, 10, 10)
 {
     bench->host_matrix_mult();
 }
-
 
 // Device
 BENCHMARK_F(D0, DeviceMatrixMult, 10, 10)
@@ -92,6 +91,10 @@ BENCHMARK_F(D10, DeviceMatrixMult, 10, 10)
     bench->device_matrix_mult();
 } 
 BENCHMARK_F(D11, DeviceMatrixMult, 10, 10)
+{
+    bench->device_matrix_mult();
+}
+BENCHMARK_F(D12, DeviceMatrixMult, 10, 10)
 {
     bench->device_matrix_mult();
 }

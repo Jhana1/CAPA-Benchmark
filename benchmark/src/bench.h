@@ -6,9 +6,13 @@
 #include <thrust/random.h>
 #include <cublas_v2.h>
 #include <curand.h>
+#include <Eigen/Dense>
+#include <Eigen/Core>
 #include <typeinfo>
+
 template <typename T, BenchInfo &B>
 struct Bench{
+    typedef Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> MatrixXT;
 
     // Non-BLAS
     thrust::host_vector<T> H;
@@ -22,6 +26,11 @@ struct Bench{
     thrust::host_vector<T> matrixC;
     size_t hA, wA, wB;
 
+    // Matrix Multiplication/Eigen Related
+    MatrixXT eMatrixA;
+    MatrixXT eMatrixB;
+    MatrixXT eMatrixC;
+
     // Constructors
     Bench() 
     {
@@ -34,7 +43,6 @@ struct Bench{
         matrixA.resize(hA * wA);
         matrixB.resize(wA * wB);
         matrixC.resize(wB * hA);
-
         randomise();
     }
 
@@ -44,6 +52,9 @@ struct Bench{
         thrust::generate(H.begin(), H.end(), rng);
         thrust::generate(matrixA.begin(), matrixA.end(), rng);
         thrust::generate(matrixB.begin(), matrixB.end(), rng);
+        eMatrixA = Eigen::Map<MatrixXT>(matrixA.data(), B.mHeightA, B.mWidthA);
+        eMatrixB = Eigen::Map<MatrixXT>(matrixB.data(), B.mWidthA, B.mWidthB);
+        eMatrixC.resize(B.mHeightA, B.mWidthB);
     }
 
     void prepare()
@@ -110,9 +121,9 @@ struct Bench{
         cublasDestroy(handle);
     }
 
-    thrust::host_vector<T> host_matrix_mult()
+    void host_matrix_mult()
     {
-        std::vector<T> ret_vec(hA * wB);
+        /*std::vector<T> ret_vec(hA * wB);
         for (size_t i = 0; i < hA; ++i)
         {
             for (size_t j = 0; j < wB; ++j)
@@ -125,10 +136,11 @@ struct Bench{
                 ret_vec[i * wB + j] = acc;
             }
         }
-        return ret_vec;
+        return ret_vec;*/
+        eMatrixC = eMatrixA * eMatrixB;
     }
 
-    thrust::host_vector<T> device_matrix_mult()
+    void device_matrix_mult()
     {
         thrust::device_vector<T> d_A = matrixA;
         thrust::device_vector<T> d_B = matrixB;
@@ -140,7 +152,6 @@ struct Bench{
                     hA, wA, wB);
 
         thrust::host_vector<T> h_C = d_C;
-        return h_C;
     }
 
     void cuBLAS_mmul(const float *matA, const float *matB, float *matC, const size_t m, const size_t k, const size_t n) 
