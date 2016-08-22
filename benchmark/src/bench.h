@@ -1,9 +1,11 @@
 #pragma once
+#define EIGEN_DONT_VECTORIZE 1
 #include "benchInfo.h"
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
 #include <thrust/random.h>
+#include <thrust/execution_policy.h>
 #include <cublas_v2.h>
 #include <curand.h>
 #include <Eigen/Dense>
@@ -17,14 +19,14 @@ struct Bench{
     // Non-BLAS
     thrust::host_vector<T> H;
     thrust::device_vector<T> D;
-    size_t WARM_UP_ITERS;
+    const size_t WARM_UP_ITERS;
 
     // Matrix Multiplication/CuBLAS Related
     cublasHandle_t handle;
     thrust::host_vector<T> matrixA;
     thrust::host_vector<T> matrixB;
     thrust::host_vector<T> matrixC;
-    size_t hA, wA, wB;
+    const size_t hA, wA, wB;
 
     // Matrix Multiplication/Eigen Related
     MatrixXT eMatrixA;
@@ -32,18 +34,21 @@ struct Bench{
     MatrixXT eMatrixC;
 
     // Constructors
-    Bench() 
+    Bench() : WARM_UP_ITERS(B.mWarmUpIterations), hA(B.mHeightA), wA(B.mWidthA), wB(B.mWidthB)
     {
         H.resize(B.mVectorLength);
-        WARM_UP_ITERS = B.mWarmUpIterations;
-        hA = B.mHeightA;
-        wA = B.mWidthA;
-        wB = B.mWidthB;
 
         matrixA.resize(hA * wA);
         matrixB.resize(wA * wB);
         matrixC.resize(wB * hA);
+        
         randomise();
+        cuBLAS_prepare();
+    }
+
+    ~Bench()
+    {
+        cuBLAS_destroy();
     }
 
     void randomise()
@@ -83,14 +88,14 @@ struct Bench{
     template <template <class> class Functor>
     T host_reduce(Functor<T> &binaryOp)
     {
-        return thrust::reduce(H.begin(), H.end(), binaryOp.identity, binaryOp);
+        return thrust::reduce(thrust::host, H.begin(), H.end(), binaryOp.identity, binaryOp);
     }
 
     template <template <class> class Functor>
     T device_reduce_onload(Functor<T> &binaryOp)
     {
-        D = H;
-        return thrust::reduce(D.begin(), D.end(), binaryOp.identity, binaryOp);
+        //D = H;
+        return thrust::reduce(thrust::device, H.begin(), H.end(), binaryOp.identity, binaryOp);
     }
 
     template <template <class> class Functor>
@@ -123,20 +128,6 @@ struct Bench{
 
     void host_matrix_mult()
     {
-        /*std::vector<T> ret_vec(hA * wB);
-        for (size_t i = 0; i < hA; ++i)
-        {
-            for (size_t j = 0; j < wB; ++j)
-            {
-                T acc = 0;
-                for (size_t k = 0; k < wA; ++k)
-                {
-                    acc += matrixA[i * wA + k] * matrixB[k * wB + j];
-                }
-                ret_vec[i * wB + j] = acc;
-            }
-        }
-        return ret_vec;*/
         eMatrixC = eMatrixA * eMatrixB;
     }
 
@@ -151,7 +142,7 @@ struct Bench{
                     thrust::raw_pointer_cast(&d_C[0]),
                     hA, wA, wB);
 
-        thrust::host_vector<T> h_C = d_C;
+        matrixC = d_C;
     }
 
     void cuBLAS_mmul(const float *matA, const float *matB, float *matC, const size_t m, const size_t k, const size_t n) 

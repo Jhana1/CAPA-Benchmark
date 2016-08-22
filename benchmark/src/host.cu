@@ -14,7 +14,7 @@
 // Benchmark Includes
 // Must include typedefs first
 #include "benchmarkTypedefs.h"
-//#include "reductionBenchmarks.h"
+#include "reductionBenchmarks.h"
 #include "matrixBenchmarks.h"
 
 int main(int argc, char *argv[])
@@ -30,12 +30,6 @@ int main(int argc, char *argv[])
         hayai::Benchmarker::AddOutputter(consoleOutputter);
     }
     
-    Bench<float, case6> bb;
-    AAA::max<float> binaryOp;
-
-    bb.prepare();
-    bb.cuBLAS_prepare();
     hayai::Benchmarker::RunAllTests();
-    bb.cuBLAS_destroy();
     return 0;
 }
