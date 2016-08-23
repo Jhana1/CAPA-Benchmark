@@ -1,4 +1,7 @@
 #pragma once
+#include "fixture.h"
+#include "benchInfo.h"
+
 // Warm Up, Vector Length, Matrix Dimensions
 BenchInfo case0 = BenchInfo(10, 1, 2, 2, 2);
 BenchInfo case1 = BenchInfo(10, 4, 4, 4, 4);

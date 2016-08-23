@@ -1,16 +1,22 @@
 #pragma once
 #define EIGEN_DONT_VECTORIZE 1
+// Project Includes 
 #include "benchInfo.h"
+
+// Third Party Includes
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
 #include <thrust/random.h>
 #include <thrust/execution_policy.h>
+#include <thrust/transform.h>
+#include <thrust/functional.h>
 #include <cublas_v2.h>
 #include <curand.h>
 #include <Eigen/Dense>
 #include <Eigen/Core>
-#include <typeinfo>
+
+// STL Includes
 
 template <typename T, BenchInfo &B>
 struct Bench{
@@ -88,14 +94,14 @@ struct Bench{
     template <template <class> class Functor>
     T host_reduce(Functor<T> &binaryOp)
     {
-        return thrust::reduce(thrust::host, H.begin(), H.end(), binaryOp.identity, binaryOp);
+         return thrust::reduce(thrust::host, H.begin(), H.end(), binaryOp.identity, binaryOp);
     }
-
+    
     template <template <class> class Functor>
     T device_reduce_onload(Functor<T> &binaryOp)
     {
-        //D = H;
-        return thrust::reduce(thrust::device, H.begin(), H.end(), binaryOp.identity, binaryOp);
+        D = H;
+        return thrust::reduce(thrust::device, D.begin(), D.end(), binaryOp.identity, binaryOp);
     }
 
     template <template <class> class Functor>
@@ -105,14 +111,46 @@ struct Bench{
     }
 
     // Scans
-    
+    template <template <class> class Functor>
+    void host_scan(Functor<T> &binaryOp)
+    {
+        thrust::inclusive_scan(thrust::host, H.begin(), H.end(), H.begin(), binaryOp);
+    }
+
+    template <template <class> class Functor>
+    void device_scan_onload(Functor<T> &binaryOp)
+    {
+        D = H;
+        thrust::inclusive_scan(thrust::device, D.begin(), D.end(), D.begin(), binaryOp);
+    }
+
+    template <template <class> class Functor>
+    void device_scan_no_onload(Functor<T> &binaryOp)
+    {
+        thrust::inclusive_scan(thrust::device, D.begin(), D.end(), D.begin(), binaryOp);
+    }
     
     // Maps
-    
+    void host_map()
+    {
+        thrust::transform(thrust::host, H.begin(), H.end(), H.begin(), thrust::negate<T>());
+    }
+
+    void device_map_onload()
+    {
+        D = H;
+        thrust::transform(thrust::device, D.begin(), D.end(), D.begin(), thrust::negate<T>());
+    }
+
+    void device_map_no_onload()
+    {
+        thrust::transform(thrust::device, D.begin(), D.end(), D.begin(), thrust::negate<T>());
+    }
+
+
     // cuBLAS
     void cuBLAS_prepare()
     {
-        D.resize(0);
         matrixA.resize(hA * wA);
         matrixB.resize(wA * wB);
         matrixC.resize(hA * wB);

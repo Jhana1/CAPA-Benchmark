@@ -1,9 +1,11 @@
 #pragma once
+// Project Headers
 #include "bench.h"
 #include "benchInfo.h"
-#include "hayai.hpp"
 
-#include <iostream>
+// Third Party Headers
+#include "hayai/hayai.hpp"
+
 
 template <typename T, BenchInfo &Info>
 struct BenchFixture : public ::hayai::Fixture

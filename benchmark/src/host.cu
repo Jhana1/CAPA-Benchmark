@@ -1,11 +1,7 @@
 // Project Headers
-#include "functors.h"
-#include "bench.h"
-#include "benchInfo.h"
-#include "benchFixture.h"
 
 // Third Party Headers
-#include "hayai.hpp"
+#include "hayai/hayai.hpp"
 
 // STL Headers
 //#include <cstdlib>
@@ -13,9 +9,11 @@
 
 // Benchmark Includes
 // Must include typedefs first
-#include "benchmarkTypedefs.h"
-#include "reductionBenchmarks.h"
-#include "matrixBenchmarks.h"
+#include "misc/typedefs.h"
+#include "benchmarks/map.h"
+#include "benchmarks/reduction.h"
+#include "benchmarks/scan.h"
+#include "benchmarks/matrix.h"
 
 int main(int argc, char *argv[])
 {
