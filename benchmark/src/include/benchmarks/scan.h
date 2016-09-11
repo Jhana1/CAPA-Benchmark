@@ -75,62 +75,62 @@ BENCHMARK_F(F11, HostMinScan, 100, 1)
 }
 
 // DEVICE MIN scan
-BENCHMARK_F(F0, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F0, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F1, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F1, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F2, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F2, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F3, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F3, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F4, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F4, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F5, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F5, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F6, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F6, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F7, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F7, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F8, DeviceMinScanOnload, 10, 1)
+BENCHMARK_F(F8, DeviceMinScan, 10, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F9, DeviceMinScanOnload, 10, 1)
+BENCHMARK_F(F9, DeviceMinScan, 10, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F10, DeviceMinScanOnload, 10, 1)
+BENCHMARK_F(F10, DeviceMinScan, 10, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);
 }
-BENCHMARK_F(F11, DeviceMinScanOnload, 100, 1)
+BENCHMARK_F(F11, DeviceMinScan, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_scan_onload(binaryOp);

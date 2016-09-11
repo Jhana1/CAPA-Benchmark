@@ -75,62 +75,62 @@ BENCHMARK_F(F11, HostMinReduce, 100, 1)
 }
 
 // DEVICE MIN REDUCE
-BENCHMARK_F(F0, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F0, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F1, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F1, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F2, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F2, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F3, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F3, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F4, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F4, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F5, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F5, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F6, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F6, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F7, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F7, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F8, DeviceMinReduceOnload, 10, 1)
+BENCHMARK_F(F8, DeviceMinReduce, 10, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F9, DeviceMinReduceOnload, 10, 1)
+BENCHMARK_F(F9, DeviceMinReduce, 10, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F10, DeviceMinReduceOnload, 10, 1)
+BENCHMARK_F(F10, DeviceMinReduce, 10, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F11, DeviceMinReduceOnload, 100, 1)
+BENCHMARK_F(F11, DeviceMinReduce, 100, 1)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
