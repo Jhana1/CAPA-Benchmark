@@ -13,124 +13,124 @@
 
 
 // HOST REDUCTION BENCHMARKS
-BENCHMARK_F(F0, HostMinReduce, 100, 1)
+BENCHMARK_F(F0, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F1, HostMinReduce, 100, 1)
+BENCHMARK_F(F1, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F2, HostMinReduce, 100, 1)
+BENCHMARK_F(F2, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F3, HostMinReduce, 100, 1)
+BENCHMARK_F(F3, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F4, HostMinReduce, 100, 1)
+BENCHMARK_F(F4, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F5, HostMinReduce, 100, 1)
+BENCHMARK_F(F5, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F6, HostMinReduce, 100, 1)
+BENCHMARK_F(F6, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F7, HostMinReduce, 100, 1)
+BENCHMARK_F(F7, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F8, HostMinReduce, 10, 1)
+BENCHMARK_F(F8, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F9, HostMinReduce, 10, 1)
+BENCHMARK_F(F9, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F10, HostMinReduce, 10, 1)
+BENCHMARK_F(F10, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
-BENCHMARK_F(F11, HostMinReduce, 100, 1)
+BENCHMARK_F(F11, HostReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->host_reduce(binaryOp);
 }
 
 // DEVICE MIN REDUCE
-BENCHMARK_F(F0, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F0, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F1, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F1, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F2, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F2, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F3, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F3, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F4, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F4, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F5, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F5, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F6, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F6, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F7, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F7, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F8, DeviceMinReduce, 10, 1)
+BENCHMARK_F(F8, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F9, DeviceMinReduce, 10, 1)
+BENCHMARK_F(F9, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F10, DeviceMinReduce, 10, 1)
+BENCHMARK_F(F10, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);
 }
-BENCHMARK_F(F11, DeviceMinReduce, 100, 1)
+BENCHMARK_F(F11, DeviceReduce, RUNS, ITERATIONS)
 {
     AAA::min<TYPE> binaryOp;
     bench->device_reduce_onload(binaryOp);

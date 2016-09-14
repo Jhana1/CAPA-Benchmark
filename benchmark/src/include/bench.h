@@ -1,5 +1,7 @@
 #pragma once
 #define EIGEN_DONT_VECTORIZE 1
+#define RUNS 10
+#define ITERATIONS 10
 // Project Includes 
 #include "benchInfo.h"
 
