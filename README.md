@@ -1,2 +1,2 @@
-# CAPA-Benchmarker
+# CAPA-Benchmark
 Benchmarking unit for CAPA
